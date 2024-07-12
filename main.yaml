@@ -1,0 +1,6 @@
+- name: Install base tools
+  ansible.builtin.import_playbook: init-base-tools.yaml
+- name: Install infra tools
+  ansible.builtin.import_playbook: init-infra-tools.yaml
+- name: Cluster initialization
+  ansible.builtin.import_playbook: cluster-init.yaml

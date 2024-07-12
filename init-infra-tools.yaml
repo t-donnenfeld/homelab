@@ -29,7 +29,7 @@
     - name: Add k8s gpg key
       changed_when: false
       ansible.builtin.shell: |
-        set -o pipefail | curl -fsSL | https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        set -o pipefail | curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     - name: Add Kubernetesapt repository
       changed_when: false
       ansible.builtin.shell: |
@@ -51,9 +51,6 @@
       ansible.builtin.apt:
         name: kubectl
         state: present
-- name: Init Docker and Kubernetes for master node
-  hosts: master
-  tasks:
     - name: Install kubeadm
       ansible.builtin.apt:
         name: "kubeadm"
