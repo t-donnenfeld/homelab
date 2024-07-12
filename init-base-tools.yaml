@@ -1,0 +1,26 @@
+- name: Common master and worker initialization
+  hosts: master workers
+  tasks:
+    - name: Disable SWAP
+      changed_when: false
+      ansible.builtin.shell: |
+        swapoff -a
+    - name: Disable SWAP in fstab
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        regexp: '^.*swap.*$'
+        line: '#\0'
+        backrefs: true
+    - name: System upgrade
+      ansible.builtin.apt:
+        upgrade: dist
+    - name: Installation of apt-utils
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
